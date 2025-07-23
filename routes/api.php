@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\AdminTaskController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,5 +25,13 @@ Route::middleware('auth:sanctum')->group(function () {
     // dashboard e listas
     Route::get('/tasks', [TaskController::class, 'index']);
     Route::get('/boards', [BoardController::class, 'index']);
-    Route::middleware('auth:sanctum')->get('/tasks/reminders', [TaskController::class, 'reminders']);
+    Route::get('/users', [AdminTaskController::class, 'users']);
+    Route::post('/create-board', [BoardController::class, 'store']);
+    Route::put('/update-board/{id}', [BoardController::class, 'update']);
+    Route::delete('/delete-board/{id}', [BoardController::class, 'delete']);
+    Route::get('/reminders', [TaskController::class, 'reminders']);
+    Route::post('/create-task', [TaskController::class, 'store']);
+    Route::put('/update-task/{id}', [TaskController::class, 'update']);
+    Route::delete('/delete-task/{id}', [TaskController::class, 'delete']);
+    Route::get('/tasks/{id}', [TaskController::class, 'show']);
 });
