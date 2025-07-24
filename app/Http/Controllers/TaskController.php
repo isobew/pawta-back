@@ -4,9 +4,23 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
 
 class TaskController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (in_array($request->route()->getActionMethod(), ['store', 'update'])) {
+                if (Gate::denies('is-admin')) {
+                    return response()->json(['message' => 'Only administrators can perform this action.'], 403);
+                }
+            }
+
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
         $search = $request->query('search');
@@ -18,8 +32,6 @@ class TaskController extends Controller
         if (!$user || !$user->is_admin) {
             $query->where('assignee_id', $user->id);
         }
-
-        $query = Task::with('board')->where('assignee_id', 4);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -49,13 +61,19 @@ class TaskController extends Controller
 
     public function reminders()
     {
-        $tasks = Task::with('board')
-            ->where('assignee_id', auth()->id())
+        $user = auth()->user();
+
+        $tasksQuery = Task::with('board')
             ->whereIn('status', ['to-do', 'in-progress'])
             ->whereNotNull('due_date')
             ->orderBy('due_date')
-            ->limit(10)
-            ->get();
+            ->limit(10);
+
+        if (!$user->is_admin) {
+            $tasksQuery->where('assignee_id', $user->id);
+        }
+
+        $tasks = $tasksQuery->get();
 
         $tasks = $tasks->map(function ($task) {
             return [
@@ -78,11 +96,11 @@ class TaskController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'nullable|string',
-            'due_date' => 'nullable|date',
+            'description' => 'required|string',
+            'status' => 'required|string',
+            'due_date' => 'required|date|after:today',
             'assignee_id' => 'required|integer',
-            'board_id' => 'nullable|integer',
+            'board_id' => 'required|integer',
             'creator_id' => 'required|integer',
         ]);
 
@@ -97,11 +115,11 @@ class TaskController extends Controller
 
         $validated = $request->validate([
             'title' => 'sometimes|required|string|max:255',
-            'description' => 'nullable|string',
-            'status' => 'nullable|string',
-            'due_date' => 'nullable|date',
-            'assignee_id' => 'nullable|integer',
-            'board_id' => 'nullable|integer',
+            'description' => 'required|string',
+            'status' => 'required|string',
+            'due_date' => 'required|date|after:today',
+            'assignee_id' => 'required|integer',
+            'board_id' => 'required|integer',
         ]);
 
         $task->update($validated);

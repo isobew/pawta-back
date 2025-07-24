@@ -59,17 +59,31 @@ class BoardController extends Controller
         return response()->json(null, 204);
     }
 
-    public function show($id)
+   public function show($id)
     {
-        $board = Board::with('tasks')->find($id);
+        $user = auth()->user();
+
+        $board = Board::find($id);
 
         if (!$board) {
             return response()->json(['message' => 'Board not found.'], 404);
         }
 
+        if ($user && $user->is_admin) {
+            $tasks = $board->tasks;
+        } else {
+            $tasks = $board->tasks()->where('assignee_id', $user->id)->get();
+        }
+
+        $tasks = $tasks->map(function ($task) use ($board) {
+            $task->board_name = $board->title ?? null;
+            $task->due_in = $task->due_date ? now()->diffInDays($task->due_date, false) : null;
+            return $task;
+        });
+
         return response()->json([
             'board' => $board,
-            'tasks' => $board->tasks
+            'tasks' => $tasks
         ]);
     }
 }
