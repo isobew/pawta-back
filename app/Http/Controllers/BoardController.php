@@ -58,4 +58,18 @@ class BoardController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function show($id)
+    {
+        $board = Board::with('tasks')->find($id);
+
+        if (!$board) {
+            return response()->json(['message' => 'Board not found.'], 404);
+        }
+
+        return response()->json([
+            'board' => $board,
+            'tasks' => $board->tasks
+        ]);
+    }
 }
