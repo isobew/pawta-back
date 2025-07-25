@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\BoardController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TaskExportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,8 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tasks/export', [TaskExportController::class, 'export']);
+
     Route::get('/tasks', [TaskController::class, 'index']);
     Route::get('/reminders', [TaskController::class, 'reminders']);
     Route::post('/create-task', [TaskController::class, 'store']);
