@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\BoardController;
-use App\Http\Controllers\AdminTaskController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // dashboard e listas
     Route::get('/tasks', [TaskController::class, 'index']);
     Route::get('/boards', [BoardController::class, 'index']);
-    Route::get('/users', [AdminTaskController::class, 'users']);
+    Route::get('/users', [AdminController::class, 'users']);
     Route::post('/create-board', [BoardController::class, 'store']);
     Route::put('/update-board/{id}', [BoardController::class, 'update']);
     Route::delete('/delete-board/{id}', [BoardController::class, 'delete']);
@@ -35,4 +35,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/delete-task/{id}', [TaskController::class, 'delete']);
     Route::get('/tasks/{id}', [TaskController::class, 'show']);
     Route::get('/board/{id}', [BoardController::class, 'show']);
+    Route::get('/users-list', [AdminController::class, 'index']);
+    Route::put('/update-user/{id}', [AdminController::class, 'updateUser']);
+    Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser']);
 });
