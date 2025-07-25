@@ -11,7 +11,7 @@ class TaskController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            if (in_array($request->route()->getActionMethod(), ['store', 'update'])) {
+            if (in_array($request->route()->getActionMethod(), ['store'])) {
                 if (Gate::denies('is-admin')) {
                     return response()->json(['message' => 'Only administrators can perform this action.'], 403);
                 }
