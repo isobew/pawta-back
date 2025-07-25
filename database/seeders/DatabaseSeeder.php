@@ -30,17 +30,22 @@ class DatabaseSeeder extends Seeder
             'is_admin' => false,
         ]);
 
-        $board = Board::create([
-            'title' => 'Board 1'
-        ]);
+        for ($i = 1; $i <= 20; $i++) {
+            $board = Board::create([
+                'title' => "Board $i"
+            ]);
 
-        Task::create([
-            'title' => 'Task 1',
-            'description' => 'Task description',
-            'status' => 'to-do',
-            'board_id' => $board->id,
-            'creator_id' => $admin->id,
-            'assignee_id' => $user->id,
-        ]);
+            for ($j = 1; $j <= 3; $j++) {
+                Task::create([
+                    'title' => "Task {$j} for Board {$i}",
+                    'description' => "Task {$j} description for Board {$i}",
+                    'status' => 'to-do',
+                    'due_date' => now()->addDays($j),
+                    'board_id' => $board->id,
+                    'creator_id' => $admin->id,
+                    'assignee_id' => $user->id,
+                ]);
+            }
+        }
     }
 }

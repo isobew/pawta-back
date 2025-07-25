@@ -33,7 +33,7 @@ class BoardController extends Controller
             });
         }
 
-        $boards = $query->orderBy('id')->paginate(10);
+        $boards = $query->orderBy('id')->paginate(14);
 
         return response()->json($boards);
     }

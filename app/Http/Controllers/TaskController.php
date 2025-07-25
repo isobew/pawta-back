@@ -40,7 +40,7 @@ class TaskController extends Controller
             });
         }
 
-        $tasks = $query->with('board')->orderBy('due_date')->paginate(10);
+        $tasks = $query->with('board')->orderBy('due_date')->paginate(12);
 
         $tasks->getCollection()->transform(function ($task) {
             return [
