@@ -22,7 +22,6 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    // dashboard e listas
     Route::get('/tasks', [TaskController::class, 'index']);
     Route::get('/boards', [BoardController::class, 'index']);
     Route::get('/users', [AdminController::class, 'users']);
