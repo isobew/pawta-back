@@ -10,7 +10,7 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            if (in_array($request->route()->getActionMethod(), ['index', 'updateUser', 'deleteUser'])) {
+            if (in_array($request->route()->getActionMethod(), ['index', 'users', 'updateUser', 'deleteUser'])) {
                 if (Gate::denies('is-admin')) {
                     return response()->json(['message' => 'Only administrators can perform this action.'], 403);
                 }

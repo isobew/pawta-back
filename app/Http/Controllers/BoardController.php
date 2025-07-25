@@ -4,9 +4,23 @@ namespace App\Http\Controllers;
 use App\Models\Board;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class BoardController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (in_array($request->route()->getActionMethod(), ['store', 'update', 'delete'])) {
+                if (Gate::denies('is-admin')) {
+                    return response()->json(['message' => 'Only administrators can perform this action.'], 403);
+                }
+            }
+
+            return $next($request);
+        });
+    }
+
     public function index(Request $request)
     {
         $search = $request->query('search');
