@@ -85,4 +85,16 @@ class BoardControllerTest extends TestCase
         $response->assertStatus(204);
         $this->assertDatabaseMissing('boards', ['id' => $board->id]);
     }
+
+    public function test_non_admin_cannot_delete_board(): void
+    {
+        $user = User::factory()->create(['is_admin' => false]);
+        $board = Board::factory()->create();
+
+        $response = $this->actingAs($user)->deleteJson("/api/delete-board/{$board->id}");
+
+        $response->assertStatus(403);
+        $this->assertDatabaseHas('boards', ['id' => $board->id]);
+    }
+
 }
