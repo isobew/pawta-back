@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tasks/{id}', [TaskController::class, 'show']);
 
     Route::get('/boards', [BoardController::class, 'index']);
+    Route::get('/boards-list', [BoardController::class, 'boardsList']);
     Route::post('/create-board', [BoardController::class, 'store']);
     Route::put('/update-board/{id}', [BoardController::class, 'update']);
     Route::delete('/delete-board/{id}', [BoardController::class, 'delete']);
