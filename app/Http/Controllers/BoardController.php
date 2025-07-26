@@ -38,6 +38,13 @@ class BoardController extends Controller
         return response()->json($boards);
     }
 
+     public function boardsList(Request $request)
+    {
+        $boards = Board::orderBy('id')->get();
+
+        return response()->json($boards);
+    }
+
     public function store(Request $request)
     {
         $request->validate([
