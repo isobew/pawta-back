@@ -44,15 +44,66 @@ php artisan key:generate
 php artisan migrate
 ```
 
+6. Rode os seeders para popular dados iniciais:
+```bash
+php artisan db:seed
+```
+
+7. Rode os testes:
+```bash
+php artisan test
+```
+
 ---
 
 ## Funcionalidades implementadas até agora
 - Autenticação via API com Laravel Breeze e Sanctum
 
-    - Registro de usuários
+- Registro de usuários
 
-    - Login e logout via token
+- Login e logout via token
 
-    - Proteção de rotas com middleware auth:sanctum
+- Proteção de rotas com middleware auth:sanctum
+
+- Gestão de Tarefas
+
+    - Criação, edição, visualização e exclusão
+    - Exportação em CSV
+    - Filtro por urgência (lembretes)
+
+- Gestão de Quadros
+
+    - Admin pode criar, editar, excluir quadros
+    - Listagem geral ou por ID com tarefas associadas
+
+- Controle de Acesso (roles)
+
+    - is_admin = true: acesso completo
+    - is_admin = false: acesso restrito às próprias tarefas
+
+- Gestão de Usuários (admin)
+
+    - Listagem paginada e completa
+    - Atualização e exclusão
 
 ---
+
+## Tecnologias e Pacotes
+    - Laravel 11
+    - Laravel Sanctum
+    - Laravel Breeze (modo API)
+    - maatwebsite/excel
+    - PHPUnit
+    - MySQL
+
+---
+
+## Documentação técnica
+A documentação pode ser acessada em:
+https://drive.google.com/file/d/1V6qDJhL7D4Hz7mRdoKtHA1z6cCsDHmbX/view?usp=sharing
+
+---
+
+## Figma
+As telas estão disponíveis em:
+https://www.figma.com/design/efdyorXhdBxhgaQwak6dRW/Pawta
